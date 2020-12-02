@@ -1,7 +1,7 @@
 import os
 
 dir = os.path.dirname(os.path.realpath(__file__))
-input = open(f"{dir}/input", "r")
+input = open(f"{dir}/input.txt", "r")
 arr = input.read().splitlines()
 
 
