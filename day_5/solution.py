@@ -1,4 +1,5 @@
 import os
+import re
 from typing import List
 
 dir = os.path.dirname(os.path.realpath(__file__))
@@ -34,40 +35,24 @@ def get_highest_seat_id(passes: List[str]) -> int:
     id = row * 8 + column
 
     assert len(passes) == 1
-    assert get_seat_id(passes[0]) == id
     return id
 
 
-print(get_highest_seat_id(passes))
+assert get_highest_seat_id(passes) == 987
 
 
 ### PART 2
-def get_row(rows_str: str) -> int:
-    row = 0
-    for i in range(7):
-        if rows_str[i] == "B":
-            row += pow(2, 6 - i)
-
-    return row
-
-
-def get_column(columns_str: str) -> int:
-    column = 0
-    for i in range(3):
-        if columns_str[i] == "R":
-            column += pow(2, 2 - i)
-
-    return column
 
 
 def get_seat_id(pass_str: str) -> int:
-    rows_str = pass_str[:-3]
-    column_str = pass_str[-3:]
+    pass_str = re.sub(r"[FL]", "0", pass_str)
+    pass_str = re.sub(r"[BR]", "1", pass_str)
+    rows = int(pass_str[:-3], 2)
+    columns = int(pass_str[-3:], 2)
 
-    return get_row(rows_str) * 8 + get_column(column_str)
+    return rows * 8 + columns
 
 
-assert (get_row("BFFFBBF")) == 70
 assert get_seat_id("BFFFBBFRRR") == 567
 assert get_seat_id("FFFBBBFRRR") == 119
 assert get_seat_id("BBFFBBFRLL") == 820
@@ -81,5 +66,5 @@ def get_my_seat_id(passes):
             return seat_id + 1
 
 
-print(get_my_seat_id(passes))
+assert get_my_seat_id(passes) == 603
 
