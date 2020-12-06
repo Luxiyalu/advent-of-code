@@ -1,6 +1,6 @@
 import os
 import re
-from typing import Callable, List
+from typing import Callable
 
 dir = os.path.dirname(os.path.realpath(__file__))
 input = open(f"{dir}/input.txt", "r")
