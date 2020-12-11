@@ -75,7 +75,7 @@ assert calc_v1([3, 4, 5]) == 2
 print(calc_v1(adaptors))
 
 
-### -- PART II: bottom-up (tree) + recursive
+### -- PART II: bottom-up forward tree + recursive
 
 
 def count_arrangements_v2(adaptors):
@@ -98,3 +98,51 @@ def count_arrangements_v2(adaptors):
 
     return f(0)
 
+
+### -- PART II: bottom-up backward tree + iterative
+
+
+def count_arrangements_v3(adaptors):
+    """
+    Same as in the previous 0 -> last tree, if drawn backwards, from last -> 0,
+    counts of any node in the tree is the sum of 3 of its previous number's counts,
+    as long as the previous number is within delta 3 of this node.
+    """
+
+    adaptors = [0, *adaptors]
+    length = len(adaptors)
+
+    if length == 2:
+        return 1
+
+    a = 1
+    b = 1
+    c = 2 if adaptors[2] <= 3 else 1
+    d = 0
+
+    if length == 3:
+        return c
+
+    for i in range(3, length):
+        d = 0
+
+        if adaptors[i] - adaptors[i - 1] <= 3:
+            d += c
+        if adaptors[i] - adaptors[i - 2] <= 3:
+            d += b
+        if adaptors[i] - adaptors[i - 3] <= 3:
+            d += a
+
+        a = b
+        b = c
+        c = d
+
+    return d
+
+
+assert count_arrangements_v3([1]) == 1
+assert count_arrangements_v3([1, 2]) == 2
+assert count_arrangements_v3([1, 2, 3]) == 4
+assert count_arrangements_v3([3, 4, 5]) == 2
+
+print(count_arrangements_v3(adaptors))
