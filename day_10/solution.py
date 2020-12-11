@@ -27,6 +27,9 @@ def count_jolts(adaptors):
     return (jolt_1, jolt_3)
 
 
+### --- PART II: top-down
+
+
 def count_arrangements(adaptors, map):
     key = frozenset(adaptors[-3:])
 
@@ -58,15 +61,40 @@ def count_arrangements(adaptors, map):
     return map[key]
 
 
-def calc(l):
+def calc_v1(l):
     v = count_arrangements([0, *l], {})
 
     return v
 
 
-assert calc([1]) == 1
-assert calc([1, 2]) == 2
-assert calc([1, 2, 3]) == 4
-assert calc([3, 4, 5]) == 2
+assert calc_v1([1]) == 1
+assert calc_v1([1, 2]) == 2
+assert calc_v1([1, 2, 3]) == 4
+assert calc_v1([3, 4, 5]) == 2
 
-print(calc(adaptors))
+print(calc_v1(adaptors))
+
+
+### -- PART II: bottom-up (tree) + recursive
+
+
+def count_arrangements_v2(adaptors):
+    adaptors = [0, *adaptors]
+
+    def f(i):
+        if i + 1 == len(adaptors):
+            return 1
+
+        count = 0
+
+        if adaptors[i + 1] - adaptors[i] <= 3:
+            count += f(i + 1)
+        if i + 2 < len(adaptors) and adaptors[i + 2] - adaptors[i] <= 3:
+            count += f(i + 2)
+        if i + 3 < len(adaptors) and adaptors[i + 3] - adaptors[i] <= 3:
+            count += f(i + 3)
+
+        return count
+
+    return f(0)
+
